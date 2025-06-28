@@ -1,0 +1,26 @@
+{
+  "name": "vacation-email-monitor",
+  "version": "1.0.0",
+  "description": "AI-powered email monitoring system for vacation alerts",
+  "main": "api/check-emails.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "tsc",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.15.0",
+    "@vercel/kv": "^1.0.1",
+    "dotenv": "^17.0.0",
+    "googleapis": "^128.0.0",
+    "telegraf": "^4.15.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@vercel/node": "^3.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

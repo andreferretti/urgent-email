@@ -1,0 +1,16 @@
+Urgency Scoring Test Results
+Timestamp: 2025-06-28T06:21:25.960Z
+
+EMAIL 1:
+Subject: Yo!
+From: "André" <andref2015@gmail.com>
+Body: Test
+—André
+
+
+URGENCY ANALYSIS:
+Score: 1/5
+Is Urgent: NO
+Reasoning: The subject "Yo!" and body "Test" suggest this is likely a casual or test email and not urgent.
+
+================================================================================
