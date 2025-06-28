@@ -13,7 +13,7 @@ export class UrgencyScorer {
       const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
 
       const prompt = `
-You are an AI assistant helping André (who is on vacation) to filter their emails. Analyze this email and rate its urgency on a scale of 1-5:
+You are an AI assistant helping André (who is on vacation) to filter their emails (he will get notified on his phone if the email gets marked as urgent). Analyze this email and rate its urgency on a scale of 1-5:
 
 1 = Not urgent (newsletters, social media, casual conversations)
 2 = Low urgency (general business inquiries, non-time-sensitive updates)  
