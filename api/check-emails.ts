@@ -71,7 +71,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       success: true,
       message: 'Email check completed',
       processed: processedCount,
-      notifications: notificationsSent
+      notifications: notificationsSent,
+      emailDetails
     });
     
   } catch (error) {
