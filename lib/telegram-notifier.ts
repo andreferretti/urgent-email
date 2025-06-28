@@ -56,7 +56,7 @@ export class TelegramNotifier {
     const urgencyEmoji = this.getUrgencyEmoji(urgencyScore.score);
     
     return `
-${urgencyEmoji} <b>URGENT EMAIL</b>
+${urgencyEmoji} <b>URGENT EMAIL</b> (${urgencyScore.score}/5)
 
 <b>From:</b> ${this.escapeHtml(email.from)}
 <b>Subject:</b> ${this.escapeHtml(email.subject)}
