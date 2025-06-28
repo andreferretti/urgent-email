@@ -27,6 +27,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     
     let processedCount = 0;
     let notificationsSent = 0;
+    const emailDetails = [];
     
     // Process each email
     for (const email of emails) {
@@ -39,11 +40,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       console.log(`🤖 Score: ${urgencyScore.score}/5`);
       
       // Send notification if urgent
+      let notificationSent = false;
       if (urgencyScore.isUrgent) {
         console.log('📱 Sending urgent notification...');
         const sent = await telegramNotifier.sendUrgentEmailAlert(email, urgencyScore);
         if (sent) {
           notificationsSent++;
+          notificationSent = true;
           console.log('✅ Notification sent');
         } else {
           console.log('❌ Notification failed');
@@ -51,6 +54,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
       
       // TODO: Mark as processed in KV storage
+      
+      emailDetails.push({
+        subject: email.subject,
+        score: urgencyScore.score,
+        isUrgent: urgencyScore.isUrgent,
+        notificationSent
+      });
       
       processedCount++;
     }
