@@ -13,7 +13,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     
     // Get all unread emails and filter by timestamp ourselves (61 minutes to be safe)
     const lastHour = new Date(Date.now() - 61 * 60 * 1000);
-    const allEmails = await gmailService.getRecentEmails(10);
+    const allEmails = await gmailService.getRecentEmails(50);
     const emails = allEmails.filter(email => email.receivedAt > lastHour);
     console.log(`📧 Found ${emails.length} unread emails since ${lastHour.toISOString()}`);
     
