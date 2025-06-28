@@ -13,7 +13,7 @@ export class UrgencyScorer {
       const model = this.genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
 
       const prompt = `
-You are an AI assistant helping someone on vacation filter their emails. Analyze this email and rate its urgency on a scale of 1-5:
+You are an AI assistant helping André (who is on vacation) to filter their emails. Analyze this email and rate its urgency on a scale of 1-5:
 
 1 = Not urgent (newsletters, social media, casual conversations)
 2 = Low urgency (general business inquiries, non-time-sensitive updates)  
@@ -21,7 +21,7 @@ You are an AI assistant helping someone on vacation filter their emails. Analyze
 4 = High urgency (time-sensitive requests, important client issues, deadlines within days)
 5 = Critical urgency (emergencies, urgent deadlines, critical system issues, family emergencies)
 
-SPECIAL CONTEXT: The person is André who developed tools for Clearer Thinking including morality reports, personality tests, and other web applications. ONLY rate 5/5 if the email specifically mentions bugs, outages, or issues affecting users of these tools. Regular personal emails should still follow the normal 1-5 scale.
+CONTEXT: André develops tools for Clearer Thinking including a morality tool, personality test, and more. ONLY rate 5/5 if the email specifically mentions bugs, outages, or issues affecting users of these tools. His boss is Spencer Greenberg, so watch out if Spencer points out a bug or urgent issue. Regular personal emails should still follow the normal 1-5 scale.
 
 EMAIL TO ANALYZE:
 From: ${email.from}
