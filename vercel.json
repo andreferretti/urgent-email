@@ -3,14 +3,5 @@
     "api/check-emails.ts": {
       "maxDuration": 60
     }
-  },
-  "env": {
-    "GOOGLE_CLIENT_ID": "@google_client_id",
-    "GOOGLE_CLIENT_SECRET": "@google_client_secret", 
-    "GOOGLE_REFRESH_TOKEN": "@google_refresh_token",
-    "GEMINI_API_KEY": "@gemini_api_key",
-    "TELEGRAM_BOT_TOKEN": "@telegram_bot_token",
-    "TELEGRAM_CHAT_ID": "@telegram_chat_id",
-    "URGENCY_THRESHOLD": "@urgency_threshold"
   }
 }
