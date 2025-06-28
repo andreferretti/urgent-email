@@ -56,7 +56,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       // TODO: Mark as processed in KV storage
       
       emailDetails.push({
-        subject: email.subject,
+        subject: email.subject.substring(0, 15),
         score: urgencyScore.score,
         isUrgent: urgencyScore.isUrgent,
         notificationSent
