@@ -62,6 +62,8 @@ ${urgencyEmoji} <b>URGENT EMAIL</b> (${urgencyScore.score}/5)
 <b>Subject:</b> ${this.escapeHtml(email.subject)}
 
 ${this.escapeHtml(email.body)}
+
+<i>AI Reasoning: ${this.escapeHtml(urgencyScore.reasoning)}</i>
 `;
   }
 
@@ -85,14 +87,4 @@ ${this.escapeHtml(email.body)}
     }
   }
 
-  private getUrgencyLevel(score: number): string {
-    switch (score) {
-      case 5: return 'CRITICAL';
-      case 4: return 'HIGH';
-      case 3: return 'MEDIUM';
-      case 2: return 'LOW';
-      case 1: return 'MINIMAL';
-      default: return 'UNKNOWN';
-    }
-  }
 }

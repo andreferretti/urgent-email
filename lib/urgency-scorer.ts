@@ -31,7 +31,8 @@ Body: ${email.body}
 Respond with ONLY a JSON object in this exact format:
 {
   "score": 3,
-  "isUrgent": false
+  "isUrgent": false,
+  "reason": "Brief one-line explanation for this score"
 }
 
 Set "isUrgent" to true only for scores 4 or 5.
@@ -55,7 +56,7 @@ Set "isUrgent" to true only for scores 4 or 5.
 
       return {
         score: parsed.score,
-        reasoning: '',
+        reasoning: (parsed as any).reason || 'No reason provided',
         isUrgent: parsed.score >= 4
       };
 
@@ -64,7 +65,7 @@ Set "isUrgent" to true only for scores 4 or 5.
       // Return default safe score on error
       return {
         score: 3,
-        reasoning: '',
+        reasoning: 'Error occurred during analysis',
         isUrgent: false
       };
     }
