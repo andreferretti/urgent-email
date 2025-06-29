@@ -61,7 +61,9 @@ export class GmailService {
       const headers = message.payload.headers;
       
       const subject = headers.find((h: any) => h.name === 'Subject')?.value || 'No Subject';
-      const from = headers.find((h: any) => h.name === 'From')?.value || 'Unknown Sender';
+      let from = headers.find((h: any) => h.name === 'From')?.value || 'Unknown Sender';
+      // Remove quotes around sender name
+      from = from.replace(/^"([^"]*)" <(.+)>$/, '$1 <$2>');
       const date = headers.find((h: any) => h.name === 'Date')?.value;
 
       let body = '';
