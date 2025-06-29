@@ -2,28 +2,63 @@ import { Telegraf } from 'telegraf';
 import { EmailMessage, UrgencyScore } from '../types';
 
 export class TelegramNotifier {
-  private bot: Telegraf;
-  private chatId: string;
+  private urgentBot: Telegraf;
+  private normalBot: Telegraf;
+  private urgentChatId: string;
+  private normalChatId: string;
 
   constructor() {
-    this.bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN!);
-    this.chatId = process.env.TELEGRAM_CHAT_ID!;
+    this.urgentBot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN!);
+    this.normalBot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN_NORMAL!);
+    this.urgentChatId = process.env.TELEGRAM_CHAT_ID!;
+    this.normalChatId = process.env.TELEGRAM_CHAT_ID_NORMAL!;
   }
 
-  async sendUrgentEmailAlert(email: EmailMessage, urgencyScore: UrgencyScore): Promise<boolean> {
+  async sendEmailNotification(email: EmailMessage, urgencyScore: UrgencyScore): Promise<boolean> {
     try {
-      const message = this.formatEmailAlert(email, urgencyScore);
+      if (urgencyScore.isUrgent) {
+        return await this.sendUrgentAlert(email, urgencyScore);
+      } else {
+        return await this.sendNormalAlert(email, urgencyScore);
+      }
+    } catch (error) {
+      console.error('❌ Failed to send email notification:', error);
+      return false;
+    }
+  }
+
+  private async sendUrgentAlert(email: EmailMessage, urgencyScore: UrgencyScore): Promise<boolean> {
+    try {
+      const message = this.formatUrgentAlert(email, urgencyScore);
       
-      await this.bot.telegram.sendMessage(this.chatId, message, {
+      await this.urgentBot.telegram.sendMessage(this.urgentChatId, message, {
         parse_mode: 'HTML',
         link_preview_options: { is_disabled: true }
       });
 
-      console.log(`✅ Telegram alert sent for email: ${email.subject}`);
+      console.log(`✅ Urgent alert sent for email: ${email.subject}`);
       return true;
 
     } catch (error) {
-      console.error('❌ Failed to send Telegram alert:', error);
+      console.error('❌ Failed to send urgent alert:', error);
+      return false;
+    }
+  }
+
+  private async sendNormalAlert(email: EmailMessage, urgencyScore: UrgencyScore): Promise<boolean> {
+    try {
+      const message = this.formatNormalAlert(email, urgencyScore);
+      
+      await this.normalBot.telegram.sendMessage(this.normalChatId, message, {
+        parse_mode: 'HTML',
+        link_preview_options: { is_disabled: true }
+      });
+
+      console.log(`✅ Normal alert sent for email: ${email.subject}`);
+      return true;
+
+    } catch (error) {
+      console.error('❌ Failed to send normal alert:', error);
       return false;
     }
   }
@@ -39,7 +74,7 @@ export class TelegramNotifier {
 <i>Test sent at: ${new Date().toLocaleString()}</i>
 `;
 
-      await this.bot.telegram.sendMessage(this.chatId, testMessage, {
+      await this.urgentBot.telegram.sendMessage(this.urgentChatId, testMessage, {
         parse_mode: 'HTML'
       });
 
@@ -52,11 +87,26 @@ export class TelegramNotifier {
     }
   }
 
-  private formatEmailAlert(email: EmailMessage, urgencyScore: UrgencyScore): string {
+  private formatUrgentAlert(email: EmailMessage, urgencyScore: UrgencyScore): string {
     const urgencyEmoji = this.getUrgencyEmoji(urgencyScore.score);
     
     return `
 ${urgencyEmoji} <b>URGENT EMAIL</b> (${urgencyScore.score}/5)
+
+<b>From:</b> ${this.escapeHtml(email.from)}
+<b>Subject:</b> ${this.escapeHtml(email.subject)}
+
+${this.escapeHtml(email.body)}
+
+<i>AI Reasoning: ${this.escapeHtml(urgencyScore.reasoning)}</i>
+`;
+  }
+
+  private formatNormalAlert(email: EmailMessage, urgencyScore: UrgencyScore): string {
+    const urgencyEmoji = this.getUrgencyEmoji(urgencyScore.score);
+    
+    return `
+${urgencyEmoji} <b>EMAIL</b> (${urgencyScore.score}/5)
 
 <b>From:</b> ${this.escapeHtml(email.from)}
 <b>Subject:</b> ${this.escapeHtml(email.subject)}
