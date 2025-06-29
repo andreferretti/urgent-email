@@ -20,7 +20,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (emails.length === 0) {
       return res.status(200).json({ 
         success: true, 
-        message: 'No unread emails found',
+        message: 'No unread emails found!',
         processed: 0
       });
     }
