@@ -6,7 +6,6 @@ import handler from './api/check-emails';
 
 async function testProductionFunction() {
   console.log('🧪 Testing production function locally...');
-  console.log('This simulates what cron-job.org will call');
   
   // Mock Vercel request/response objects
   const mockReq = {} as any;

@@ -95,9 +95,9 @@ ${urgencyEmoji} <b>URGENT</b> (${urgencyScore.score}/5)
 
 <b>From:</b> ${this.escapeHtml(email.from)}
 <b>Subject:</b> ${this.escapeHtml(email.subject)}
+<b>Reasoning:</b> ${this.escapeHtml(urgencyScore.reasoning)}
 
 ${this.escapeHtml(email.body)}
-<i>AI Reasoning: ${this.escapeHtml(urgencyScore.reasoning)}</i>
 `;
   }
 
@@ -109,9 +109,9 @@ ${urgencyEmoji} <b>EMAIL</b> (${urgencyScore.score}/5)
 
 <b>From:</b> ${this.escapeHtml(email.from)}
 <b>Subject:</b> ${this.escapeHtml(email.subject)}
+<b>Reasoning:</b> ${this.escapeHtml(urgencyScore.reasoning)}
 
 ${this.escapeHtml(email.body)}
-<i>AI Reasoning: ${this.escapeHtml(urgencyScore.reasoning)}</i>
 `;
   }
 

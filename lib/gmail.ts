@@ -83,12 +83,26 @@ export class GmailService {
         threadId: message.threadId,
         subject,
         from,
-        body: body.substring(0, 500), // Truncate for testing
+        body: this.extractPlainText(body).substring(0, 1000),
         receivedAt: date ? new Date(date) : new Date(),
       };
     } catch (error) {
       console.error(`Error fetching email ${messageId}:`, error);
       return null;
     }
+  }
+
+  private extractPlainText(htmlContent: string): string {
+    // Remove HTML tags and decode common entities
+    return htmlContent
+      .replace(/<[^>]*>/g, '') // Remove HTML tags
+      .replace(/&nbsp;/g, ' ') // Non-breaking space
+      .replace(/&amp;/g, '&')  // Ampersand
+      .replace(/&lt;/g, '<')   // Less than
+      .replace(/&gt;/g, '>')   // Greater than
+      .replace(/&quot;/g, '"') // Quote
+      .replace(/&#39;/g, "'")  // Apostrophe
+      .replace(/\s+/g, ' ')    // Collapse whitespace
+      .trim();
   }
 }
