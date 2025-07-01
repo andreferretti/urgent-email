@@ -83,7 +83,7 @@ export class GmailService {
         threadId: message.threadId,
         subject,
         from,
-        body: this.extractPlainText(body).substring(0, 1000),
+        body: this.cleanEmailBody(body),
         receivedAt: date ? new Date(date) : new Date(),
       };
     } catch (error) {
@@ -92,17 +92,46 @@ export class GmailService {
     }
   }
 
-  private extractPlainText(htmlContent: string): string {
-    // Remove HTML tags and decode common entities
-    return htmlContent
-      .replace(/<[^>]*>/g, '') // Remove HTML tags
-      .replace(/&nbsp;/g, ' ') // Non-breaking space
-      .replace(/&amp;/g, '&')  // Ampersand
-      .replace(/&lt;/g, '<')   // Less than
-      .replace(/&gt;/g, '>')   // Greater than
-      .replace(/&quot;/g, '"') // Quote
-      .replace(/&#39;/g, "'")  // Apostrophe
-      .replace(/\s+/g, ' ')    // Collapse whitespace
+  private cleanEmailBody(htmlContent: string): string {
+    // First, get more content (1500 chars)
+    let content = htmlContent.substring(0, 1500);
+    
+    // Remove CSS styles and @media queries
+    content = content.replace(/@media[^{]*\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/g, '');
+    content = content.replace(/@font-face[^{]*\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/g, '');
+    content = content.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
+    
+    // Remove script tags
+    content = content.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+    
+    // Remove links but keep link text (remove URLs from href attributes)
+    content = content.replace(/<a[^>]*href="[^"]*"[^>]*>(.*?)<\/a>/gi, '$1');
+    content = content.replace(/https?:\/\/[^\s)]+/g, ''); // Remove standalone URLs
+    
+    // Remove HTML tags
+    content = content.replace(/<[^>]*>/g, '');
+    
+    // Decode HTML entities
+    content = content
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&rdquo;/g, '"')
+      .replace(/&ldquo;/g, '"')
+      .replace(/&rsquo;/g, "'")
+      .replace(/&lsquo;/g, "'");
+    
+    // Clean up whitespace but preserve line breaks
+    content = content
+      .replace(/[ \t]+/g, ' ') // Collapse spaces/tabs but keep newlines
+      .replace(/\n\s*\n\s*\n/g, '\n\n') // Max 2 consecutive newlines
+      .replace(/^\s+|\s+$/g, '') // Trim start/end
       .trim();
+    
+    // Final trim to 1000 chars for Gemini
+    return content.substring(0, 1000);
   }
 }

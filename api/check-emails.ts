@@ -11,11 +11,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const urgencyScorer = new UrgencyScorer();
     const telegramNotifier = new TelegramNotifier();
     
-    // Get all unread emails and filter by timestamp ourselves (61 minutes to be safe)
-    const lastHour = new Date(Date.now() - 61 * 60 * 1000);
+    // Get hours from query parameter (default: 61 minutes for production)
+    const hours = req.query.hours ? parseFloat(req.query.hours as string) : 61/60;
+    const timeAgo = new Date(Date.now() - hours * 60 * 60 * 1000);
     const allEmails = await gmailService.getRecentEmails(42);
-    const emails = allEmails.filter(email => email.receivedAt > lastHour);
-    console.log(`📧 Found ${emails.length} unread emails since ${lastHour.toISOString()}`);
+    const emails = allEmails.filter(email => email.receivedAt > timeAgo);
+    console.log(`📧 Found ${emails.length} unread emails since ${timeAgo.toISOString()} (${hours} hours ago)`);
     
     if (emails.length === 0) {
       return res.status(200).json({ 

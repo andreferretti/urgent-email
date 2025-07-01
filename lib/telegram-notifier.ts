@@ -109,6 +109,7 @@ ${urgencyEmoji} <b>EMAIL</b> (${urgencyScore.score}/5)
 
 <b>From:</b> ${this.escapeHtml(email.from)}
 <b>Subject:</b> ${this.escapeHtml(email.subject)}
+
 <b>Reasoning:</b> ${this.escapeHtml(urgencyScore.reasoning)}
 
 ${this.escapeHtml(email.body)}
