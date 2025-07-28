@@ -19,4 +19,4 @@ Get new refresh token (expires every 7 days)
 6. Click "Authorize APIs"
 7. Sign in with your Google account
 8. Click "Exchange authorization code for tokens"
-9. Copy the Refresh token from the response
+9. Copy the Refresh token from the response.
