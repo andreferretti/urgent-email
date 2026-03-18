@@ -63,6 +63,25 @@ export class TelegramNotifier {
     }
   }
 
+  async sendErrorAlert(errorMessage: string): Promise<boolean> {
+    try {
+      const message = `
+🔴 <b>Email Monitor Error</b>
+
+${this.escapeHtml(errorMessage)}
+
+<i>${new Date().toLocaleString()}</i>
+`;
+      await this.urgentBot.telegram.sendMessage(this.urgentChatId, message, {
+        parse_mode: 'HTML'
+      });
+      return true;
+    } catch (err) {
+      console.error('❌ Failed to send error alert:', err);
+      return false;
+    }
+  }
+
   async sendTestMessage(): Promise<boolean> {
     try {
       const testMessage = `

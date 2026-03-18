@@ -78,9 +78,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     
   } catch (error) {
     console.error('❌ Email check failed:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    try {
+      const telegramNotifier = new TelegramNotifier();
+      await telegramNotifier.sendErrorAlert(errorMessage);
+    } catch (notifyError) {
+      console.error('❌ Failed to send error notification:', notifyError);
+    }
     return res.status(500).json({
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: errorMessage
     });
   }
 }
