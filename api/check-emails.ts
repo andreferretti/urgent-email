@@ -6,7 +6,7 @@ import { TelegramNotifier } from '../lib/telegram-notifier';
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const secret = req.query.secret as string;
   if (!process.env.CRON_SECRET || secret !== process.env.CRON_SECRET) {
-    console.log('Auth failed - CRON_SECRET env var exists:', !!process.env.CRON_SECRET);
+    console.log('Auth failed - CRON_SECRET length:', process.env.CRON_SECRET?.length, 'secret length:', secret?.length);
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
