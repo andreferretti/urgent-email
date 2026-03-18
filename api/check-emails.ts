@@ -10,7 +10,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    console.log('🔄 Starting email check...');
+    console.log('🔄 Starting email check');
 
     const gmailService = new GmailService();
     const urgencyScorer = new UrgencyScorer();
