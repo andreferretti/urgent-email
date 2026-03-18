@@ -4,9 +4,14 @@ import { UrgencyScorer } from '../lib/urgency-scorer';
 import { TelegramNotifier } from '../lib/telegram-notifier';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  const secret = req.query.secret;
+  if (secret !== process.env.CRON_SECRET) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
   try {
     console.log('🔄 Starting email check...');
-    
+
     const gmailService = new GmailService();
     const urgencyScorer = new UrgencyScorer();
     const telegramNotifier = new TelegramNotifier();
@@ -57,7 +62,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       // TODO: Mark as processed in KV storage
       
       emailDetails.push({
-        subject: email.subject.substring(0, 15),
+        subject: email.subject,
         score: urgencyScore.score,
         isUrgent: urgencyScore.isUrgent,
         notificationSent
