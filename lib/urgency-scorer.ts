@@ -38,6 +38,8 @@ Set "isUrgent" to true only for scores 4 or 5.
         headers: {
           'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
           'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://vacation-email.vercel.app',
+          'X-OpenRouter-Title': 'Vacation Email',
         },
         body: JSON.stringify({
           model: 'google/gemini-3-flash-preview',
