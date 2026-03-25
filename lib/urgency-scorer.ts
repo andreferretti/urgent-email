@@ -16,6 +16,8 @@ CONTEXT: André develops tools for Clearer Thinking including a morality tool, p
 
 Rate 4-5 for time-sensitive issues that require immediate attention, including travel disruptions like flight changes or cancellations. Routine notifications should be rated lower unless there's an actual problem.
 
+Automated emails from services André doesn't actively use (account inactivity warnings, subscription reminders, "we miss you" emails, organization deletion notices, etc.) should be rated 1-2. André doesn't care about these unless there's a genuinely critical consequence for a service he actively depends on.
+
 Regular personal emails should still follow the normal 1-5 scale.
 
 EMAIL TO ANALYZE:
