@@ -11,7 +11,7 @@ export class UrgencyScorer {
 4 = High urgency (time-sensitive requests, important client issues, deadlines within days)
 5 = Critical urgency (emergencies, urgent deadlines, critical issues, family emergencies)
 
-CONTEXT: André develops tools for Clearer Thinking including a morality tool, personality test, unique traits test,and more. ONLY rate 5/5 if the email specifically mentions bugs, outages, or issues affecting users of these tools AND requires André to take immediate action. If someone else is handling the issue or just reporting it for André's awareness, rate it lower (2-3) unless André needs to do something urgently.
+CONTEXT: André develops tools for Clearer Thinking including a morality tool, personality test, unique traits test, and more. Any email reporting bugs, access issues, or problems affecting users of these tools should be rated 4+. André wants to know about ALL project-related bugs, not just site-wide outages. Rate 5/5 for critical outages affecting many users.
 
 Rate 4-5 for time-sensitive issues that require immediate attention, including travel disruptions like flight changes or cancellations. Routine notifications should be rated lower unless there's an actual problem.
 
