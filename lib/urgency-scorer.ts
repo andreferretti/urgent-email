@@ -53,7 +53,7 @@ Body: ${email.body}`;
         headers: {
           'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
           'Content-Type': 'application/json',
-          'HTTP-Referer': 'https://vacation-email.vercel.app',
+          'HTTP-Referer': 'https://example.com',
           'X-OpenRouter-Title': 'Vacation Email',
         },
         body: JSON.stringify({
