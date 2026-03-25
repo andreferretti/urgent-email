@@ -3,8 +3,7 @@ import { EmailMessage, UrgencyScore } from '../types';
 export class UrgencyScorer {
   async scoreEmail(email: EmailMessage): Promise<UrgencyScore> {
     try {
-      const prompt = `
-You are an AI assistant helping André to filter their emails (he will get notified on his phone if the email gets marked as urgent). Analyze this email and rate its urgency on a scale of 1-5:
+      const prompt = `You are an AI assistant helping André to filter their emails (he will get notified on his phone if the email gets marked as urgent). Analyze this email and rate its urgency on a scale of 1-5:
 
 1 = Not urgent (newsletters, social media, casual conversations)
 2 = Low urgency (general business inquiries, non-time-sensitive updates)
@@ -12,7 +11,7 @@ You are an AI assistant helping André to filter their emails (he will get notif
 4 = High urgency (time-sensitive requests, important client issues, deadlines within days)
 5 = Critical urgency (emergencies, urgent deadlines, critical issues, family emergencies)
 
-CONTEXT: André develops tools for Clearer Thinking including a morality tool, personality test, and more. ONLY rate 5/5 if the email specifically mentions bugs, outages, or issues affecting users of these tools AND requires André to take immediate action. If someone else is handling the issue or just reporting it for André's awareness, rate it lower (2-3) unless André needs to do something urgently.
+CONTEXT: André develops tools for Clearer Thinking including a morality tool, personality test, unique traits test,and more. ONLY rate 5/5 if the email specifically mentions bugs, outages, or issues affecting users of these tools AND requires André to take immediate action. If someone else is handling the issue or just reporting it for André's awareness, rate it lower (2-3) unless André needs to do something urgently.
 
 Rate 4-5 for time-sensitive issues that require immediate attention, including travel disruptions like flight changes or cancellations. Routine notifications should be rated lower unless there's an actual problem.
 
@@ -23,17 +22,31 @@ Regular personal emails should still follow the normal 1-5 scale.
 EMAIL TO ANALYZE:
 From: ${email.from}
 Subject: ${email.subject}
-Body: ${email.body}
+Body: ${email.body}`;
 
-Respond with ONLY a JSON object in this exact format:
-{
-  "score": 3,
-  "isUrgent": false,
-  "reason": "Brief one-line explanation for this score"
-}
-
-Set "isUrgent" to true only for scores 4 or 5.
-`;
+      const tools = [
+        {
+          type: 'function' as const,
+          function: {
+            name: 'score_email',
+            description: 'Submit the urgency score for the analyzed email',
+            parameters: {
+              type: 'object',
+              properties: {
+                score: {
+                  type: 'number',
+                  description: 'Urgency score from 1 (not urgent) to 5 (critical)',
+                },
+                reason: {
+                  type: 'string',
+                  description: 'Brief one-line explanation for this score',
+                },
+              },
+              required: ['score', 'reason'],
+            },
+          },
+        },
+      ];
 
       const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
@@ -46,6 +59,8 @@ Set "isUrgent" to true only for scores 4 or 5.
         body: JSON.stringify({
           model: 'google/gemini-3-flash-preview',
           messages: [{ role: 'user', content: prompt }],
+          tools,
+          tool_choice: { type: 'function', function: { name: 'score_email' } },
         }),
       });
 
@@ -54,24 +69,20 @@ Set "isUrgent" to true only for scores 4 or 5.
       }
 
       const data: any = await res.json();
-      const response = data.choices[0].message.content;
-      
-      // Parse JSON response
-      const jsonMatch = response.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) {
-        throw new Error('Could not parse AI response as JSON');
+      const toolCall = data.choices[0].message.tool_calls?.[0];
+      if (!toolCall) {
+        throw new Error('Model did not return a tool call');
       }
 
-      const parsed = JSON.parse(jsonMatch[0]) as UrgencyScore;
-      
-      // Validate response
+      const parsed = JSON.parse(toolCall.function.arguments);
+
       if (typeof parsed.score !== 'number' || parsed.score < 1 || parsed.score > 5) {
         throw new Error('Invalid urgency score from AI');
       }
 
       return {
         score: parsed.score,
-        reasoning: (parsed as any).reason || 'No reason provided',
+        reasoning: parsed.reason || 'No reason provided',
         isUrgent: parsed.score >= 4
       };
 
