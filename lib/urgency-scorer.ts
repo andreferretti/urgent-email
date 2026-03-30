@@ -11,11 +11,13 @@ export class UrgencyScorer {
 4 = High urgency (time-sensitive requests, important client issues, deadlines within days)
 5 = Critical urgency (emergencies, urgent deadlines, critical issues, family emergencies)
 
-CONTEXT: André develops tools for Clearer Thinking including a morality tool, personality test, unique traits test, and more. Any email reporting bugs, access issues, or problems affecting users of these tools should be rated 4+. André wants to know about ALL project-related bugs, not just site-wide outages. Rate 5/5 for critical outages affecting many users.
+CONTEXT: André develops tools for Clearer Thinking including a morality tool, personality test, unique traits test, and more. Any email reporting bugs, access issues, or problems affecting users of these tools should be rated 4+. André wants to know about ALL project-related bugs, not just site-wide outages. Rate 5/5 for critical outages affecting many users. However, if the email thread makes it clear that a bug has already been fixed or resolved (e.g., someone confirmed the fix, or the latest message is a thank-you/reaction to a fix), rate it 1-2 — there's nothing left for André to act on.
 
 Rate 4-5 for time-sensitive issues that require immediate attention, including travel disruptions like flight changes or cancellations. Routine notifications should be rated lower unless there's an actual problem.
 
 Automated emails from services André doesn't actively use (account inactivity warnings, subscription reminders, "we miss you" emails, organization deletion notices, etc.) should be rated 1-2. André doesn't care about these unless there's a genuinely critical consequence for a service he actively depends on.
+
+Routine security alerts (e.g., "Security alert for [email]", new sign-in notifications, third-party app access confirmations) should be rated 1-2. These are informational, not emergencies — unless the email indicates genuinely suspicious unauthorized access.
 
 Regular personal emails should still follow the normal 1-5 scale.
 
