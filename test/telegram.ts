@@ -1,8 +1,8 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import { TelegramNotifier } from './lib/telegram-notifier';
-import { EmailMessage, UrgencyScore } from './types';
+import { TelegramNotifier } from '../lib/telegram-notifier';
+import { EmailMessage, UrgencyScore } from '../types';
 
 async function sendFakeUrgent() {
   const notifier = new TelegramNotifier();

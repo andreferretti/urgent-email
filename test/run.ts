@@ -2,15 +2,15 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 // Simulate the Vercel function locally
-import handler from './api/check-emails';
+import handler from '../api/check-emails';
 
 async function testProductionFunction() {
   console.log('🧪 Testing production function locally...');
-  
+
   // Get hours from command line argument (default: 24)
   const hours = process.argv[2] ? parseInt(process.argv[2]) : 24;
   console.log(`📅 Checking emails from last ${hours} hours`);
-  
+
   // Mock Vercel request/response objects
   const mockReq = { query: { hours: hours.toString() } } as any;
   const mockRes = {
@@ -21,7 +21,7 @@ async function testProductionFunction() {
       }
     })
   } as any;
-  
+
   await handler(mockReq, mockRes);
 }
 

@@ -3,7 +3,6 @@ dist/
 build/
 out/
 *.tsbuildinfo
-CLAUDE.md
 
 .env
 .vercel

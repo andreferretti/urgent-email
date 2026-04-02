@@ -49,7 +49,7 @@ export class GmailService {
     }
   }
 
-  private async getEmailDetails(messageId: string): Promise<EmailMessage | null> {
+  async getEmailDetails(messageId: string): Promise<EmailMessage | null> {
     try {
       const response = await this.gmail.users.messages.get({
         userId: 'me',
@@ -66,17 +66,7 @@ export class GmailService {
       from = from.replace(/^"([^"]*)" <(.+)>$/, '$1 <$2>');
       const date = headers.find((h: any) => h.name === 'Date')?.value;
 
-      let body = '';
-      if (message.payload.body?.data) {
-        body = Buffer.from(message.payload.body.data, 'base64').toString();
-      } else if (message.payload.parts) {
-        for (const part of message.payload.parts) {
-          if (part.mimeType === 'text/plain' && part.body?.data) {
-            body = Buffer.from(part.body.data, 'base64').toString();
-            break;
-          }
-        }
-      }
+      const body = this.extractBody(message.payload);
 
       return {
         id: messageId,
@@ -90,6 +80,35 @@ export class GmailService {
       console.error(`Error fetching email ${messageId}:`, error);
       return null;
     }
+  }
+
+  private extractBody(payload: any): string {
+    // Direct body data (simple emails)
+    if (payload.body?.data) {
+      return Buffer.from(payload.body.data, 'base64').toString();
+    }
+
+    if (!payload.parts) return '';
+
+    // Recursively search for text/plain first, then text/html as fallback
+    let plain = '';
+    let html = '';
+
+    const search = (parts: any[]) => {
+      for (const part of parts) {
+        if (part.mimeType === 'text/plain' && part.body?.data) {
+          plain = Buffer.from(part.body.data, 'base64').toString();
+        } else if (part.mimeType === 'text/html' && part.body?.data && !html) {
+          html = Buffer.from(part.body.data, 'base64').toString();
+        } else if (part.parts) {
+          search(part.parts);
+        }
+        if (plain) return; // prefer plain text, stop early
+      }
+    };
+
+    search(payload.parts);
+    return plain || html;
   }
 
   private cleanEmailBody(htmlContent: string): string {
