@@ -27,8 +27,6 @@ export async function processEmails(emails: EmailMessage[], services: EmailServi
 
   // Send notifications sequentially (avoid Telegram rate limits)
   for (const { email, urgencyScore } of scoredEmails) {
-    // TODO: Check if already processed using KV storage
-
     console.log(`📱 Sending ${urgencyScore.isUrgent ? 'urgent' : 'normal'} notification...`);
     const sent = await services.sendNotification(email, urgencyScore);
     let notificationSent = false;
@@ -41,8 +39,6 @@ export async function processEmails(emails: EmailMessage[], services: EmailServi
     } else {
       console.log('❌ Notification failed');
     }
-
-    // TODO: Mark as processed in KV storage
 
     emailDetails.push({
       subject: email.subject,

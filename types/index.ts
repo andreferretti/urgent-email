@@ -12,10 +12,3 @@ export interface UrgencyScore {
   reasoning: string;
   isUrgent: boolean;
 }
-
-export interface ProcessedEmail {
-  messageId: string;
-  processedAt: Date;
-  urgencyScore: number;
-  notificationSent: boolean;
-}

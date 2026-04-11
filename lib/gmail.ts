@@ -18,16 +18,8 @@ export class GmailService {
     this.gmail = google.gmail({ version: 'v1', auth: oauth2Client });
   }
 
-  async getRecentEmails(maxResults: number = 10, sinceTimestamp?: Date): Promise<EmailMessage[]> {
+  async getRecentEmails(maxResults: number = 10): Promise<EmailMessage[]> {
     try {
-      let query = 'is:unread';
-      
-      // Add timestamp filter if provided (Gmail uses YYYY/MM/DD format)
-      if (sinceTimestamp) {
-        const dateStr = sinceTimestamp.toISOString().split('T')[0].replace(/-/g, '/');
-        query += ` after:${dateStr}`;
-      }
-      
       const response = await this.gmail.users.messages.list({
         userId: 'me',
         maxResults,
