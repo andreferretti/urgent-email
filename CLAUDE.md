@@ -39,3 +39,21 @@ All test files live in `test/`:
 - `test/run.ts` — runs the full pipeline locally (fetches Gmail, scores, notifies): `npx tsx test/run.ts [hours]`
 - `test/urgency.ts` — scores a single email N times to check consistency: `npx tsx test/urgency.ts <messageId> [runs]`
 - `test/telegram.ts` — sends a fake notification to verify Telegram setup: `npx tsx test/telegram.ts`
+
+### Debugging a specific email
+
+To find a specific email and test how the service processes it:
+
+1. **Find the message ID** — search Gmail API directly (the service's `getRecentEmails` only returns unread):
+   ```
+   npx tsx -e "
+   require('dotenv').config();
+   const { google } = require('googleapis');
+   const oauth2Client = new google.auth.OAuth2(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET, 'http://localhost:8080');
+   oauth2Client.setCredentials({ refresh_token: process.env.GOOGLE_REFRESH_TOKEN });
+   const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
+   gmail.users.messages.list({ userId: 'me', maxResults: 5, q: 'from:sender@example.com after:2026/04/11' }).then(r => console.log(r.data.messages));
+   "
+   ```
+2. **Run the urgency test** with that ID: `npx tsx test/urgency.ts <messageId> 1`
+   - This shows exactly what the service extracts (subject, from, cleaned body) and how Gemini scores it

@@ -112,9 +112,8 @@ export class GmailService {
   }
 
   private cleanEmailBody(htmlContent: string): string {
-    // First, get more content (2100 chars)
-    let content = htmlContent.substring(0, 2100);
-    
+    let content = htmlContent;
+
     // Remove CSS styles and @media queries
     content = content.replace(/@media[^{]*\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/g, '');
     content = content.replace(/@font-face[^{]*\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/g, '');
