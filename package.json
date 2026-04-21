@@ -1,7 +1,7 @@
 {
-  "name": "vacation-email-monitor",
+  "name": "urgent-email",
   "version": "1.0.0",
-  "description": "AI-powered email monitoring system for vacation alerts",
+  "description": "AI-powered email monitoring that flags urgent emails via Telegram",
   "main": "api/check-emails.js",
   "scripts": {
     "dev": "vercel dev",
