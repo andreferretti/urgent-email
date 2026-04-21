@@ -6,14 +6,14 @@ A small AI tool I built for myself: it watches my Gmail inbox and pings me on Te
 
 1. A cron job hits a Vercel serverless endpoint every hour.
 2. The endpoint fetches unread emails from Gmail (last ~61 min).
-3. Each email is scored 1–5 for urgency by an LLM (Gemini 3 Flash via OpenRouter), with a prompt tuned to my specific work context.
-4. Urgent ones (score ≥ 4) go to a "loud" Telegram bot; the rest go to a quieter one I can check on my own time.
+3. Each email is scored 1–5 for urgency by an LLM (Gemini 3.0 Flash via OpenRouter), with a prompt tuned to my specific work context.
+4. Urgent emails (score ≥ 4) send me a notification via a Telegram bot; the rest go to a Telegram bot I muted (i.e., archived) just so I have the logs of all emails.
 
 ## Stack
 
 - Vercel serverless function (TypeScript)
 - Gmail API (OAuth2 refresh token)
-- OpenRouter → Gemini 3 Flash for scoring
+- OpenRouter → Gemini 3.0 Flash for scoring
 - Two Telegram bots (urgent vs. normal)
 - cron-job.org for the hourly trigger
 
@@ -31,7 +31,7 @@ Copy `.env.example` to `.env` and fill it in as you go.
 
 ### 1. Gmail OAuth (client ID, secret, refresh token)
 
-Warning: I used AI to write these instructions, so they might not be up to date.
+**Warning:** I used AI to write these instructions, and Gmail API setup is complex, so they might be incorrect or out of date.
 
 1. Go to the [Google Cloud Console](https://console.cloud.google.com/), create (or pick) a project, and enable the **Gmail API**.
 2. Under **APIs & Services → Credentials**, create an **OAuth client ID** of type *Web application*. Add `https://developers.google.com/oauthplayground` as an authorized redirect URI. Copy the client ID and secret into `.env`.
@@ -41,13 +41,13 @@ Warning: I used AI to write these instructions, so they might not be up to date.
 
 ### 2. OpenRouter API key
 
-Sign up at [openrouter.ai](https://openrouter.ai/), create a key, and add it as `OPENROUTER_API_KEY`. Top up a few dollars of credit.
+Sign up at [openrouter.ai](https://openrouter.ai/), create a key, and add it as `OPENROUTER_API_KEY`. Top up a few dollars of credit. An alternative is calling the Gemini API directly, but you would have to tweak the project code for that.
 
 ### 3. Cron secret
 
-The serverless endpoint is a public URL, so anyone who guesses or stumbles on it could hit it and burn your OpenRouter credits (or just spam your Telegram). To prevent that, the endpoint requires a `?secret=...` query param and rejects any request where it doesn't match `CRON_SECRET`. The cron job (and you, when testing) append the secret; nobody else knows it.
+The serverless endpoint is a public URL, so anyone who guesses or stumbles on it could hit it and burn your OpenRouter credits (or just spam your Telegram). To prevent that, the endpoint requires a `?secret=...` query parameter and rejects any request where it doesn't match `CRON_SECRET`. The cron job (and you, when testing) append the secret; nobody else knows it.
 
-Generate a random one and put it in `.env`:
+You can generate a random one with the following command. Then, put it in `.env`:
 
 ```
 openssl rand -hex 16
