@@ -12,7 +12,7 @@ async function testProductionFunction() {
   console.log(`📅 Checking emails from last ${hours} hours`);
 
   // Mock Vercel request/response objects
-  const mockReq = { query: { hours: hours.toString() } } as any;
+  const mockReq = { query: { hours: hours.toString(), secret: process.env.CRON_SECRET } } as any;
   const mockRes = {
     status: (code: number) => ({
       json: (data: any) => {
