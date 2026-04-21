@@ -5,6 +5,7 @@ out/
 *.tsbuildinfo
 
 .env
+CLAUDE.md
 .vercel
 *.log
 logs/
