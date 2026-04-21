@@ -31,13 +31,11 @@ Copy `.env.example` to `.env` and fill it in as you go.
 
 ### 1. Gmail OAuth (client ID, secret, refresh token)
 
-**Warning:** I used AI to write these instructions, and Gmail API setup is complex, so they might be incorrect or out of date.
-
 1. Go to the [Google Cloud Console](https://console.cloud.google.com/), create (or pick) a project, and enable the **Gmail API**.
-2. Under **APIs & Services → Credentials**, create an **OAuth client ID** of type *Web application*. Add `https://developers.google.com/oauthplayground` as an authorized redirect URI. Copy the client ID and secret into `.env`.
-3. Configure the **OAuth consent screen** and publish it (if you leave it in Testing, refresh tokens expire after 7 days).
+2. Under **APIs & Services → Credentials**, create an **OAuth client ID** of type *Web application*. Add `https://developers.google.com/oauthplayground` as an authorized redirect URI. Click "create", then copy the client ID and secret into `.env`.
+3. In the left-hand menu, go to **OAuth consent screen** -> **Audience** and publish it (if you leave it in Testing, refresh tokens expire after 7 days).
 4. Open the [OAuth 2.0 Playground](https://developers.google.com/oauthplayground/) → gear icon → check **Use your own OAuth credentials** and paste in the client ID/secret.
-5. In the scope list, select `https://www.googleapis.com/auth/gmail.readonly`, click **Authorize APIs**, sign in, then **Exchange authorization code for tokens**. Copy the **refresh token** into `.env`.
+5. In the scope list (step 1), input `https://www.googleapis.com/auth/gmail.readonly` inside the "Input your own scopes" box, click **Authorize APIs**, sign in, then **Exchange authorization code for tokens**. Copy the **refresh token** into `.env`.
 
 ### 2. OpenRouter API key
 
