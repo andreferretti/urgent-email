@@ -1,6 +1,6 @@
-# urgent-email
+# Urgent Email
 
-A small AI tool I built for myself: it watches my Gmail inbox and pings me on Telegram only when something actually urgent comes in, so I can ignore email the rest of the day.
+A small AI tool I built for myself: it watches my Gmail inbox and pings me on Telegram only when something actually urgent comes in, so I can ignore email when I'm not working.
 
 ## How it works
 
