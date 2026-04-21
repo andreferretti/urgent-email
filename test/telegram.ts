@@ -19,6 +19,7 @@ async function sendFakeUrgent() {
   const urgencyScore: UrgencyScore = {
     score: 5,
     reasoning: 'Production database alert requiring immediate action',
+    summary: 'Ops team reports the production database is on fire and needs immediate attention.',
     isUrgent: true,
   };
 

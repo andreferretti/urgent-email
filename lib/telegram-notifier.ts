@@ -116,6 +116,8 @@ ${urgencyEmoji} <b>URGENT</b> (${urgencyScore.score}/5)
 
 <b>Subject:</b> ${this.escapeHtml(email.subject)}
 
+<b>Summary:</b> ${this.escapeHtml(urgencyScore.summary)}
+
 <b>Reason:</b> ${this.escapeHtml(urgencyScore.reasoning)}
 `;
   }
@@ -129,6 +131,8 @@ ${urgencyEmoji} <b>EMAIL</b> (${urgencyScore.score}/5)
 <b>From:</b> ${this.escapeHtml(email.from)}
 
 <b>Subject:</b> ${this.escapeHtml(email.subject)}
+
+<b>Summary:</b> ${this.escapeHtml(urgencyScore.summary)}
 
 <b>Reason:</b> ${this.escapeHtml(urgencyScore.reasoning)}
 `;

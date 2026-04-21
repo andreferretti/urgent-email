@@ -3,21 +3,15 @@ import { EmailMessage, UrgencyScore } from '../types';
 export class UrgencyScorer {
   async scoreEmail(email: EmailMessage): Promise<UrgencyScore> {
     try {
-      const prompt = `You are an AI assistant helping André to filter their emails (he will get notified on his phone if the email gets marked as urgent). Analyze this email and rate its urgency on a scale of 1-5:
+      const prompt = `You are an AI assistant helping André to filter their emails (he will get notified on his phone if the email gets marked as urgent). Analyze this email and rate its urgency on a scale of 1-5 (where 1 is Not urgent and 5 is critical)
 
-1 = Not urgent (newsletters, social media, casual conversations)
-2 = Low urgency (general business inquiries, non-time-sensitive updates)
-3 = Medium urgency (meeting requests, project updates with flexible deadlines)
-4 = High urgency (time-sensitive requests, important client issues, deadlines within days)
-5 = Critical urgency (emergencies, urgent deadlines, critical issues, family emergencies)
+CONTEXT: André developed tools for Clearer Thinking including a morality tool, personality test, unique traits test, and more. Any email reporting bugs, access issues, or problems affecting users of these tools should be rated 4+. André wants to know about project-related bugs, not site-wide outages that are not under his responsibility. Rate 5/5 for critical outages affecting many users. However, if the email thread makes it clear that a bug has already been fixed or resolved (e.g., someone confirmed the fix, or the latest message is a thank-you/reaction to a fix), rate it 1-2 — there's nothing left for André to act on.
 
-CONTEXT: André develops tools for Clearer Thinking including a morality tool, personality test, unique traits test, and more. Any email reporting bugs, access issues, or problems affecting users of these tools should be rated 4+. André wants to know about ALL project-related bugs, not just site-wide outages. Rate 5/5 for critical outages affecting many users. However, if the email thread makes it clear that a bug has already been fixed or resolved (e.g., someone confirmed the fix, or the latest message is a thank-you/reaction to a fix), rate it 1-2 — there's nothing left for André to act on.
+Rate 4-5 for time-sensitive issues that require immediate attention, including travel disruptions like flight cancellations, significant delays, missed connections. Routine airline/travel notifications should be rated 1-2. This includes gate number announcements, check-in reminders, and similar informational messages.
 
-Rate 4-5 for time-sensitive issues that require immediate attention, including travel disruptions like flight changes or cancellations. Routine notifications should be rated lower unless there's an actual problem.
+Automated emails from services (account inactivity warnings, subscription reminders, "we miss you" emails, organization deletion notices, etc.) should be rated 1-2.
 
-Automated emails from services André doesn't actively use (account inactivity warnings, subscription reminders, "we miss you" emails, organization deletion notices, etc.) should be rated 1-2. André doesn't care about these unless there's a genuinely critical consequence for a service he actively depends on.
-
-Routine security alerts (e.g., "Security alert for [email]", new sign-in notifications, third-party app access confirmations) should be rated 1-2. These are informational, not emergencies — unless the email indicates genuinely suspicious unauthorized access.
+Routine security alerts (e.g., "Security alert for [email]", new sign-in notifications, third-party app access confirmations) should be rated 1-2.
 
 Regular personal emails should still follow the normal 1-5 scale.
 
@@ -43,8 +37,12 @@ Body: ${email.body}`;
                   type: 'string',
                   description: 'Brief one-line explanation for this score',
                 },
+                summary: {
+                  type: 'string',
+                  description: 'Concise 1-2 sentence summary addressed directly to André in the second person (use "you", "your"). Describe what the email is about and what it asks of him, if anything.',
+                },
               },
-              required: ['score', 'reason'],
+              required: ['score', 'reason', 'summary'],
             },
           },
         },
@@ -85,6 +83,7 @@ Body: ${email.body}`;
       return {
         score: parsed.score,
         reasoning: parsed.reason || 'No reason provided',
+        summary: parsed.summary || '',
         isUrgent: parsed.score >= 4
       };
 
@@ -94,6 +93,7 @@ Body: ${email.body}`;
       return {
         score: 3,
         reasoning: 'Error occurred during analysis',
+        summary: '',
         isUrgent: false
       };
     }

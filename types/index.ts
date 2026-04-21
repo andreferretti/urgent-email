@@ -10,5 +10,6 @@ export interface EmailMessage {
 export interface UrgencyScore {
   score: number;
   reasoning: string;
+  summary: string;
   isUrgent: boolean;
 }

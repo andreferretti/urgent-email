@@ -21,6 +21,7 @@ function makeServices(overrides: Partial<EmailServices> = {}): EmailServices {
     scoreEmail: mock.fn(async (): Promise<UrgencyScore> => ({
       score: 2,
       reasoning: 'Not urgent',
+      summary: 'Test email summary',
       isUrgent: false,
     })),
     sendNotification: mock.fn(async () => true),
@@ -44,6 +45,7 @@ describe('processEmails', () => {
     const scoreFn = mock.fn(async (): Promise<UrgencyScore> => ({
       score: 1,
       reasoning: 'Low',
+      summary: 'Low priority email',
       isUrgent: false,
     }));
     const notifyFn = mock.fn(async () => true);
@@ -68,9 +70,9 @@ describe('processEmails', () => {
 
     let callIndex = 0;
     const scores: UrgencyScore[] = [
-      { score: 5, reasoning: 'Critical', isUrgent: true },
-      { score: 1, reasoning: 'Chill', isUrgent: false },
-      { score: 4, reasoning: 'Important', isUrgent: true },
+      { score: 5, reasoning: 'Critical', summary: 'Critical summary', isUrgent: true },
+      { score: 1, reasoning: 'Chill', summary: 'Chill summary', isUrgent: false },
+      { score: 4, reasoning: 'Important', summary: 'Important summary', isUrgent: true },
     ];
 
     const services = makeServices({
@@ -117,7 +119,7 @@ describe('processEmails', () => {
         // Simulate async work so parallel calls can overlap
         await new Promise((r) => setTimeout(r, 50));
         concurrent--;
-        return { score: 2, reasoning: 'ok', isUrgent: false };
+        return { score: 2, reasoning: 'ok', summary: 'ok', isUrgent: false };
       }),
     });
 
