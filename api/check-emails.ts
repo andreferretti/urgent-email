@@ -79,7 +79,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const hours = req.query.hours ? parseFloat(req.query.hours as string) : 61/60;
     const timeAgo = new Date(Date.now() - hours * 60 * 60 * 1000);
     const allEmails = await services.getEmails(42);
-    const emails = allEmails.filter(email => email.receivedAt > timeAgo);
+    const emails = allEmails.filter(email =>
+      email.receivedAt > timeAgo &&
+      !/@mail\.andreferretti\.com\b/i.test(email.from)
+    );
     console.log(`📧 Found ${emails.length} unread emails since ${timeAgo.toISOString()} (${hours} hours ago)`);
 
     if (emails.length === 0) {
