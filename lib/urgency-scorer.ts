@@ -9,6 +9,8 @@ CONTEXT: André developed tools for Clearer Thinking including a morality tool, 
 
 Rate 4-5 for time-sensitive issues that require immediate attention, including travel disruptions like flight cancellations, significant delays, missed connections. Routine airline/travel notifications should be rated 1-2. This includes gate number announcements, check-in reminders, and similar informational messages.
 
+André is currently in hiring processes as a developer. Rate 4-5 for emails about interview results, offers, rejections, scheduling or rescheduling interviews, take-home assignments, recruiter follow-ups, or invitations to next steps in a hiring process.
+
 Automated emails from services (account inactivity warnings, subscription reminders, "we miss you" emails, organization deletion notices, etc.) should be rated 1-2.
 
 Routine security alerts (e.g., "Security alert for [email]", new sign-in notifications, third-party app access confirmations) should be rated 1-2.
